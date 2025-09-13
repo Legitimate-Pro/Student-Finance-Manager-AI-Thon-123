@@ -42,6 +42,35 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
+.notifications-panel {
+  padding: 1rem;
+  background: var(--card);
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+.alert {
+  background: #fffa;
+  color: #000;
+  border-left: 4px solid var(--accent);
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+body.dark .alert {
+  background: #292929;
+  color: #eee;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 button:hover {
   opacity: 0.9;
 }
