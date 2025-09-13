@@ -19,6 +19,27 @@ function categorizeExpense(desc) {
   return 'Others';
 }
 
+function showAlert(msg) {
+  const div = document.createElement('div');
+  div.textContent = msg;
+  div.classList.add('alert');
+
+  alertsEl.prepend(div); // Newest on top
+
+  const alerts = alertsEl.querySelectorAll('.alert');
+  if (alerts.length > 3) {
+    alertsEl.removeChild(alerts[alerts.length - 1]); // Remove oldest
+  }
+
+  // Auto-remove after 8 seconds
+  setTimeout(() => {
+    if (div.parentNode === alertsEl) {
+      alertsEl.removeChild(div);
+    }
+  }, 8000);
+}
+
+
 // Show alert
 function showAlert(msg) {
   const div = document.createElement('div');
