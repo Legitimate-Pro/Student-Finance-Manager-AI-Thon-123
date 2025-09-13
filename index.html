@@ -32,9 +32,31 @@
         <input type="number" id="expense-amount" step="0.01" min="0" required />
       </label>
       <label>
-        Description:
-        <input type="text" id="expense-desc" placeholder="e.g., McDonald's, Rent" required />
+        Category:
+        <select id="expense-category">
+          <option value="">Auto Categorize</option>
+          <option value="Food">Food</option>
+          <option value="Rent">Rent</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Transport">Transport</option>
+          <option value="EMI/Loan">EMI/Loan</option>
+          <option value="Others">Others</option>
+          <option value="__custom__">➕ Add Custom Category</option>
+        </select>
       </label>
+      
+      <div id="custom-category-wrapper" class="hidden">
+        <label>
+          New Category:
+          <input type="text" id="custom-category-input" placeholder="e.g., Subscriptions" />
+        </label>
+      </div>
+      
+      <label>
+        Description:
+        <input type="text" id="expense-desc" placeholder="e.g., Chicken rice bowl, Netflix" required />
+      </label>
+
       <button type="submit">Add Expense</button>
     </form>
   </section>
