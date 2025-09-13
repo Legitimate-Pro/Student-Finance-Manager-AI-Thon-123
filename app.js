@@ -6,6 +6,23 @@ let monthlyIncome = localStorage.getItem('monthlyIncome') || null;
 
 const categories = ['Food', 'Rent', 'Entertainment', 'Transport', 'EMI/Loan', 'Others'];
 
+let customCategories = JSON.parse(localStorage.getItem('customCategories')) || [];
+
+function getAllCategories() {
+  return [...categories, ...customCategories];
+}
+
+function updateCategoryDropdown() {
+  const select = document.getElementById('expense-category');
+  select.innerHTML = `
+    <option value="">Auto Categorize</option>
+    ${categories.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+    ${customCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+    <option value="__custom__">➕ Add Custom Category</option>
+  `;
+}
+
+
 const alertsList = document.getElementById('alerts-list');
 const alertSection = document.getElementById('alerts-section');
 
@@ -96,9 +113,9 @@ function categorizeExpense(desc) {
   // Simple keyword based categorization
   const descLower = desc.toLowerCase();
   if (descLower.match(/rent|house|apartment/)) return 'Rent';
-  if (descLower.match(/food|restaurant|cafe|dinner|lunch|breakfast|mcdo|pizza|burger|hotel/)) return 'Food';
+  if (descLower.match(/food|restaurant|cafe|dinner|lunch|breakfast|mcdo|pizza|burger|hotel|chicken|rice|biryani|meal|thali|bowl|pizza|burger|cafe|restaurant/)) return 'Food';
   if (descLower.match(/movie|netflix|spotify|entertainment|game|gaming|concert/)) return 'Entertainment';
-  if (descLower.match(/uber|ola|taxi|bus|train|metro|transport|fuel|petrol|diesel/)) return 'Transport';
+  if (descLower.match(/uber|ola|taxi|bus|train|metro|transport|fuel|petrol|diesel|rapido/)) return 'Transport';
   // If description matches any loan or EMI, assign EMI/Loan
   if (loans.some(loan => descLower.includes(loan.name.toLowerCase()))) return 'EMI/Loan';
   return 'Others';
@@ -109,11 +126,40 @@ expenseForm.addEventListener('submit', (e) => {
   const date = e.target['expense-date'].value;
   const amount = parseFloat(e.target['expense-amount'].value);
   const desc = e.target['expense-desc'].value.trim();
+  let selectedCategory = categorySelect.value;
 
-  if (!date || !amount || !desc) {
-    alert('Fill all expense fields properly');
-    return;
+  // Handle custom category addition
+  if (selectedCategory === '__custom__') {
+    const customCat = customCatInput.value.trim();
+    if (!customCat) {
+      alert('Please enter a custom category');
+      return;
+    }
+    selectedCategory = customCat;
+    if (!customCategories.includes(customCat)) {
+      customCategories.push(customCat);
+      localStorage.setItem('customCategories', JSON.stringify(customCategories));
+      updateCategoryDropdown(); // Refresh dropdown
+    }
+    customCatInput.value = '';
+    customCatWrapper.classList.add('hidden');
   }
+
+  // Auto categorize if none selected
+  if (!selectedCategory) {
+    selectedCategory = categorizeExpense(desc);
+  }
+
+  const newExpense = { date, amount, description: desc, category: selectedCategory };
+  expenses.push(newExpense);
+  localStorage.setItem('expenses', JSON.stringify(expenses));
+
+  addAlert(`Added ₹${amount.toFixed(2)} to ${selectedCategory} on ${date} 🤑`);
+
+  e.target.reset();
+  updateDashboard();
+  checkBudgetAlerts();
+});
 
   const category = categorizeExpense(desc);
 
@@ -334,6 +380,7 @@ function sendWeeklyTopCategoryNotification() {
 
 // Run weekly notification on page load for demo (in real app, would be scheduled)
 window.addEventListener('load', () => {
+  updateCategoryDropdown();
   if (monthlyIncome) {
     updateDashboard();
     sendWeeklyTopCategoryNotification();
@@ -345,5 +392,20 @@ monthSelect.addEventListener('change', () => {
   updateExpenseChart();
   updateExpenseTable(monthSelect.value);
 });
+
+const categorySelect = document.getElementById('expense-category');
+const customCatWrapper = document.getElementById('custom-category-wrapper');
+const customCatInput = document.getElementById('custom-category-input');
+
+categorySelect.addEventListener('change', () => {
+  if (categorySelect.value === '__custom__') {
+    customCatWrapper.classList.remove('hidden');
+    customCatInput.required = true;
+  } else {
+    customCatWrapper.classList.add('hidden');
+    customCatInput.required = false;
+  }
+});
+
 
 // ---------- Initialize ----------
