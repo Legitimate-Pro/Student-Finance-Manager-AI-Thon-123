@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Finance Buddy 💸</title>
+<link rel="stylesheet" href="styles.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-container">
+  <header>
+    <h1>AI Finance Buddy 💸</h1>
+    <button id="theme-toggle">Switch to Light Theme</button>
+  </header>
+
+  <section id="income-section" class="input-section">
+    <h2>Step 1: Tell me your monthly income (₹)</h2>
+    <input type="number" id="monthly-income" placeholder="Enter monthly income in ₹" />
+    <button id="save-income-btn">Save Income</button>
+  </section>
+
+  <section id="expense-entry" class="input-section hidden">
+    <h2>Add Expense</h2>
+    <form id="expense-form">
+      <label>
+        Date:
+        <input type="date" id="expense-date" required />
+      </label>
+      <label>
+        Amount (₹):
+        <input type="number" id="expense-amount" step="0.01" min="0" required />
+      </label>
+      <label>
+        Description:
+        <input type="text" id="expense-desc" placeholder="e.g., McDonald's, Rent" required />
+      </label>
+      <button type="submit">Add Expense</button>
+    </form>
+  </section>
+
+  <section id="loan-section" class="input-section hidden">
+    <h2>Add Pending EMIs / Loans</h2>
+    <form id="loan-form">
+      <label>
+        Loan Name:
+        <input type="text" id="loan-name" placeholder="e.g., Car EMI" required />
+      </label>
+      <label>
+        Monthly Payment (₹):
+        <input type="number" id="loan-amount" step="0.01" min="0" required />
+      </label>
+      <button type="submit">Add Loan</button>
+    </form>
+  </section>
+
+  <section id="budget-goals-section" class="input-section hidden">
+    <h2>Set Budget & Goals</h2>
+    <form id="budget-goal-form">
+      <label>
+        Category:
+        <select id="goal-category" required>
+          <option value="" disabled selected>Select category</option>
+          <option value="Food">Food</option>
+          <option value="Rent">Rent</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Transport">Transport</option>
+          <option value="EMI/Loan">EMI/Loan</option>
+          <option value="Others">Others</option>
+        </select>
+      </label>
+      <label>
+        Budget Limit (₹):
+        <input type="number" id="budget-limit" step="0.01" min="0" required />
+      </label>
+      <label>
+        Savings Goal (₹):
+        <input type="number" id="savings-goal" step="0.01" min="0" />
+      </label>
+      <button type="submit">Set Budget/Goal</button>
+    </form>
+  </section>
+
+  <section id="alerts-section" class="alerts hidden">
+    <h2>Alerts & Notifications</h2>
+    <ul id="alerts-list"></ul>
+  </section>
+
+  <section id="dashboard-section" class="hidden">
+    <h2>Dashboard</h2>
+
+    <div class="chart-container">
+      <canvas id="expense-chart"></canvas>
+    </div>
+
+    <div id="goal-progress">
+      <h3>Goal Progress</h3>
+      <ul id="goal-list"></ul>
+    </div>
+
+    <div id="month-selector">
+      <label for="month-select">View Expenses By Month:</label>
+      <input type="month" id="month-select" />
+    </div>
+
+    <div id="monthly-expense-list">
+      <h3>Expenses for Selected Month</h3>
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount (₹)</th></tr>
+        </thead>
+        <tbody id="expense-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
