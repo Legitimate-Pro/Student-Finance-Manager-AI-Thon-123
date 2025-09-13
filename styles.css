@@ -40,6 +40,10 @@ h1 {
   color: var(--dark-accent);
 }
 
+#custom-category-wrapper {
+  margin-top: 0.5rem;
+}
+
 button {
   background-color: var(--dark-accent);
   border: none;
