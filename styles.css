@@ -23,6 +23,13 @@ header {
   justify-content: space-between;
   background: var(--card);
 }
+
+.chart-container {
+  max-width: 400px;  /* smaller width */
+  max-height: 400px; /* smaller height */
+  margin: 0 auto;    /* center horizontally */
+}
+
 form {
   display: flex;
   flex-wrap: wrap;
